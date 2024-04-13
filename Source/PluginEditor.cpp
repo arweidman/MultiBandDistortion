@@ -153,8 +153,8 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     bypassButton.setBounds(10, 10, 100, 20);
     bypassButton.setButtonText("Bypass");
     bypassButton.setToggleState(false, juce::dontSendNotification);
-    addAndMakeVisible(bypassButton);
-    // bypassButton.addListener(this);
+//    addAndMakeVisible(bypassButton);
+//    bypassButton.addListener(this);
 
 }
 

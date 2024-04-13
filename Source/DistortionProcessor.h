@@ -10,8 +10,9 @@
 
 #pragma once
 #include <JuceHeader.h>
+#include "Biquad.h"
 
-class DistortionProcessor {
+class DistortionProcessor : public Biquad {
     
 public:
     

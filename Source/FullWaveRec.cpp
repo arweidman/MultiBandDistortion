@@ -11,5 +11,7 @@
 #include "FullWaveRec.h"
 
 float FullWaveRec::processSample(float x, const int c) {
-    return abs(x);
+    
+    return (dry * x) + (wet * abs(x));
+    
 }

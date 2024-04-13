@@ -11,6 +11,9 @@
 #include "SoftClipArcTan.h"
 
 float SoftClipArcTan::processSample(float x, const int c) {
-    x = atan(x * alpha) * 2/M_PI;
-    return x;
+    
+    float y = atan(x * alpha) * 2/M_PI;
+    
+    return (dry * x) - (wet * y);
+    
 }

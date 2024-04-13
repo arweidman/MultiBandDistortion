@@ -11,11 +11,16 @@
 #include "InfClip.h"
 
 float InfClip::processSample(float x, const int c) {
-    if (x > 0) {
-        x = 1;
+    
+    float y = x;
+    
+    if (y > 0) {
+        y = 1;
     }
     else {
-        x = -1;
+        y = -1;
     }
-    return x;
+    
+    return (dry * x) - (wet * y);
+    
 }

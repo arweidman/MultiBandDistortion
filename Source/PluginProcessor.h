@@ -83,18 +83,17 @@ private:
     
     // This will be the first selection band (Low frequencies)
     Biquad lowBandLowPass;
-    Biquad lowBandLowPassDup; // Duplicated
+    Biquad lowBandLowPassDup; // Dup means duplicate
     
     // This will be the second selection band (Mid frequencies)
     Biquad midBandLowPass;
-    Biquad midBandLowPassDup; // Duplicated
+    Biquad midBandLowPassDup;
     Biquad midBandHighPass;
     Biquad midBandHighPassDup;
     
     // This will be the third selection band (High frequencies)
     Biquad highBandHighPass;
     Biquad highBandHighPassDup;
-    
     
     double Fs = 48000;
     //==============================================================================

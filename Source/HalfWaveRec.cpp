@@ -11,8 +11,16 @@
 #include "HalfWaveRec.h"
 
 float HalfWaveRec::processSample(float x, const int c) {
-    if (x < 0.f) {
-        x = 0.f;
+    
+    float y = x;
+    
+    if (y < 0.f) {
+        y = 0.f;
     }
-    return x;
+    else {
+        y = y;
+    }
+    
+    return (dry * x) - (wet * y);
+    
 }
