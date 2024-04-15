@@ -6,6 +6,12 @@
   ==============================================================================
 */
 
+// Current goals for the project:
+// -Implement a solo button per band
+// -Implement a frequency spectrum graphic
+// -Implement more distortion options
+// -Implement a "check" where the higher crossover point cannot be set below the lower crossover point
+
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "FullWaveRec.h"

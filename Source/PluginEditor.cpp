@@ -117,8 +117,6 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     firstBandSelectionType.addItem("Infinite Clip", 5);
     firstBandSelectionType.addItem("Soft Clip (Arc Tangent)", 6);
     firstBandSelectionType.addItem("Soft Clip (Cubic)", 7);
-//    firstBandSelectionType.addItem("Peak/Bell", 7);
-//    firstBandSelectionType.addItem("Select Type...", 8);
     addAndMakeVisible(firstBandSelectionType);
     
     // Selection Combo Box for Band 2
@@ -131,8 +129,6 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     secondBandSelectionType.addItem("Infinite Clip", 5);
     secondBandSelectionType.addItem("Soft Clip (Arc Tangent)", 6);
     secondBandSelectionType.addItem("Soft Clip (Cubic)", 7);
-//    secondBandSelectionType.addItem("Peak/Bell", 7);
-//    secondBandSelectionType.addItem("Select Type...", 8);
     addAndMakeVisible(secondBandSelectionType);
     
     // Selection Combo Box for Band 3
@@ -145,16 +141,37 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     thirdBandSelectionType.addItem("Infinite Clip", 5);
     thirdBandSelectionType.addItem("Soft Clip (Arc Tangent)", 6);
     thirdBandSelectionType.addItem("Soft Clip (Cubic)", 7);
-//    thirdBandSelectionType.addItem("Peak/Bell", 7);
-//    thirdBandSelectionType.addItem("Select Type...", 8);
     addAndMakeVisible(thirdBandSelectionType);
     
     // Bypass Button
     bypassButton.setBounds(10, 10, 100, 20);
     bypassButton.setButtonText("Bypass");
     bypassButton.setToggleState(false, juce::dontSendNotification);
-//    addAndMakeVisible(bypassButton);
+    addAndMakeVisible(bypassButton);
 //    bypassButton.addListener(this);
+    
+    // First Band Solo Button
+    firstBandSoloButton.setBounds(70, 610, 100, 20);
+    firstBandSoloButton.setButtonText("Solo");
+    firstBandSoloButton.setToggleState(false, juce::dontSendNotification);
+    addAndMakeVisible(firstBandSoloButton);
+//    bypassButton.addListener(this);
+    
+    // Second Band Solo Button
+    secondBandSoloButton.setBounds(370, 610, 100, 20);
+    secondBandSoloButton.setButtonText("Solo");
+    secondBandSoloButton.setToggleState(false, juce::dontSendNotification);
+    addAndMakeVisible(secondBandSoloButton);
+//    bypassButton.addListener(this);
+    
+    // third Band Solo Button
+    thirdBandSoloButton.setBounds(670, 610, 100, 20);
+    thirdBandSoloButton.setButtonText("Solo");
+    thirdBandSoloButton.setToggleState(false, juce::dontSendNotification);
+    addAndMakeVisible(thirdBandSoloButton);
+//    bypassButton.addListener(this);
+    
+    
 
 }
 

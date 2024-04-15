@@ -59,6 +59,9 @@ private:
     
     // Standard bypass button
     juce::ToggleButton bypassButton;
+    juce::ToggleButton firstBandSoloButton;
+    juce::ToggleButton secondBandSoloButton;
+    juce::ToggleButton thirdBandSoloButton;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MultiBandDistortionAudioProcessorEditor)
 };
