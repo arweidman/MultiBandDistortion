@@ -25,8 +25,4 @@ private:
     
     float alpha = 1.0f; // Between 1 and 10
 
-    float wet = 0.f; // helps us get a balance between two parts, the unprocessed and proccessed signals (0 - 1)
-    
-    float dry = 1.f;
-  
 };

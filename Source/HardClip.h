@@ -31,8 +31,4 @@ private:
     
     float thresh = 1.0f; // between 0 and 1
     
-    float wet = 0.f; // helps us get a balance between two parts, the unprocessed and proccessed signals (0 - 1)
-    
-    float dry = 1.f;
-  
 };

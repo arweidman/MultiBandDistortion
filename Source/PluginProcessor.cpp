@@ -160,34 +160,34 @@ void MultiBandDistortionAudioProcessor::processBlock (juce::AudioBuffer<float>& 
     // First Band Filtering (Low Pass)
     lowBandLowPass.setFreq(filterFrequencyCrossover1); // function that sets our freq. will be equal to that of the first crossover value
     lowBandLowPass.setQ(0.707f); // function that sets our q value
-    lowBandLowPass.setAmpdB(10.f); // function that sets our amplitude
+    lowBandLowPass.setAmpdB(0.f); // function that sets our amplitude
     lowBandLowPass.setFilterType(Biquad::FilterType::LPF); // function that sets our filter type
                 
     lowBandLowPassDup.setFreq(filterFrequencyCrossover1); // duplicate function that will be combined with our first
     lowBandLowPassDup.setQ(0.707f);
-    lowBandLowPassDup.setAmpdB(10.f);
+    lowBandLowPassDup.setAmpdB(0.f);
     lowBandLowPassDup.setFilterType(Biquad::FilterType::LPF);
     
     // Second Band Filtering (Band Pass)
     // The 1st frequency crossover value is set to the highpass cutoff
     // The 2nd frequency crossover value is set to the Lowpass cutoff
     // When combined together, they make the band pass
-    midBandHighPass.setQ(filterFrequencyCrossover1);
+    midBandHighPass.setFreq(filterFrequencyCrossover1);
     midBandHighPass.setQ(0.707f);
     midBandHighPass.setAmpdB(0.f);
     midBandHighPass.setFilterType(Biquad::FilterType::HPF);
     
-    midBandHighPassDup.setQ(filterFrequencyCrossover1);
+    midBandHighPassDup.setFreq(filterFrequencyCrossover1);
     midBandHighPassDup.setQ(0.707f);
     midBandHighPassDup.setAmpdB(0.f);
     midBandHighPassDup.setFilterType(Biquad::FilterType::HPF);
     
-    midBandLowPass.setQ(filterFrequencyCrossover2);
+    midBandLowPass.setFreq(filterFrequencyCrossover2);
     midBandLowPass.setQ(0.707f);
     midBandLowPass.setAmpdB(0.f);
     midBandLowPass.setFilterType(Biquad::FilterType::LPF);
     
-    midBandLowPassDup.setQ(filterFrequencyCrossover2);
+    midBandLowPassDup.setFreq(filterFrequencyCrossover2);
     midBandLowPassDup.setQ(0.707f);
     midBandLowPassDup.setAmpdB(0.f);
     midBandLowPassDup.setFilterType(Biquad::FilterType::LPF);
@@ -227,35 +227,30 @@ void MultiBandDistortionAudioProcessor::processBlock (juce::AudioBuffer<float>& 
 //        }
         
         // MAIN PROCESSING DONE HERE
+        
         for (int n = 0 ; n < N ; n++) {
               
             // First Band Effects Processing
             float a = lowBandLowPass.processSample(channelData[n], channel); // Process the filter on the sample
-            float b = lowBandLowPassDup.processSample(channelData[n], channel); // Process the filter on the sample
+            float band1Filter = lowBandLowPassDup.processSample(a, channel); // Process the filter on the sample
             
-            float band1Filter = a + b; // combine the two
-            
-            effect[0]->processSample(band1Filter, channel); // Processes the filtered sample with the effect parameters
+            float band1Processed = effect[0]->processSample(band1Filter, channel); // Processes the filtered sample with the effect parameters
             
             // Second Band Effects Processing
-            float c = midBandHighPass.processSample(buffer.getWritePointer(channel)[n], channel);
-            float d = midBandHighPassDup.processSample(buffer.getWritePointer(channel)[n], channel); // Process the filter on the sample
-            float e = midBandLowPass.processSample(buffer.getWritePointer(channel)[n], channel); // Process the filter on the sample
-            float f = midBandLowPassDup.processSample(buffer.getWritePointer(channel)[n], channel); // Process the filter on the sample
+            float b = midBandHighPass.processSample(buffer.getWritePointer(channel)[n], channel);
+            float c = midBandHighPassDup.processSample(b, channel); // Process the filter on the sample
+            float d = midBandLowPass.processSample(c, channel); // Process the filter on the sample
+            float band2Filter = midBandLowPassDup.processSample(d, channel); // Process the filter on the sample
             
-            float band2Filter = c + d + e + f;
-            
-            effect[1]->processSample(band2Filter, channel);
+            float band2Processed = effect[1]->processSample(band2Filter, channel);
             
             // Third Band Effects Processing
-            float g = highBandHighPass.processSample(buffer.getWritePointer(channel)[n], channel);
-            float h = highBandHighPassDup.processSample(buffer.getWritePointer(channel)[n], channel);
-            
-            float band3Filter = g + h;
+            float e = highBandHighPass.processSample(buffer.getWritePointer(channel)[n], channel);
+            float band3Filter = highBandHighPassDup.processSample(e, channel);
 
-            effect[2]->processSample(band3Filter, channel);
+            float band3Processed = effect[2]->processSample(band3Filter, channel);
             
-            channelData[n] = band1Filter + band2Filter + band3Filter;
+            channelData[n] = band1Processed + band2Processed + band3Processed;
             
             // My original idea was to make a copy of each buffer, apply processing to each individually then combine them back together. This ended up being quite a pain and I was unable to get it to work,
             

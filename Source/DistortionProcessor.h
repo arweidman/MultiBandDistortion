@@ -10,9 +10,9 @@
 
 #pragma once
 #include <JuceHeader.h>
-#include "Biquad.h"
+//#include "Biquad.h"
 
-class DistortionProcessor : public Biquad {
+class DistortionProcessor {
     
 public:
     
@@ -23,8 +23,8 @@ public:
     }
     
     void setWet(float inputWet) { // set wet amount function
-        wet = (inputWet/100); // takes a value from 1 to 100 and shrinks it down to a value between 0 - 1
-        dry = 1 - wet;
+        wet = (inputWet/100.f); // takes a value from 1 to 100 and shrinks it down to a value between 0 - 1
+        dry = 1.f - wet;
     }
     
     void virtual setDistParam1(float inputDistParam1) {
@@ -41,13 +41,13 @@ public:
         return x; // Just passes through "like a wire." The program will run this when empty is selected in the combo box
     }
     
+    float wet = 0.f; // helps us get a balance between two parts, the unprocessed and proccessed signals (0 - 1)
+    
+    float dry = 1.f;
+    
 private:
     
     double Fs = 48000.0;
-    
-    float wet = 0.f; // helps us get a balance between two parts, the unprocessed and proccessed signals (0 - 1)
-    
-    float dry = 1.f; 
     
     float distParam1 = 0.f;
     
