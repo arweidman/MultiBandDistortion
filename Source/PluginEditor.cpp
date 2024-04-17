@@ -19,49 +19,56 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // First freq crossover slider
     firstCrossover.setBounds(250, 350, 100, 100);
-    firstCrossover.setRange(20, 20000.f); // the right parameter will be stopped at the left parameter of secondCrossover.setRange
+    firstCrossover.setRange(20, 20000.f, 1.f); // eventually, the right parameter will be stopped at the left parameter of secondCrossover.setRange
     firstCrossover.setSkewFactorFromMidPoint(650.f);
+    firstCrossover.setValue(650.f);
     firstCrossover.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     firstCrossover.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
+    firstCrossover.setTextValueSuffix(" Hz");
     addAndMakeVisible(firstCrossover);
     firstCrossover.addListener(this);
     
     // Second freq crossover slider
     secondCrossover.setBounds(650, 350, 100, 100);
-    secondCrossover.setRange(20, 20000.f); // the left parameter will be stopped at the right parameter of secondCrossover.setRange
+    secondCrossover.setRange(20, 20000.f, 1.f); // the left parameter will be stopped at the right parameter of secondCrossover.setRange
     secondCrossover.setSkewFactorFromMidPoint(3500.f); // set so the middle of the knob will be 1000Hz, left will be 20 - 1000, and right will be 1000-20000
+    secondCrossover.setValue(3500.f);
     secondCrossover.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     secondCrossover.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
+    secondCrossover.setTextValueSuffix(" Hz");
     addAndMakeVisible(secondCrossover);
     secondCrossover.addListener(this);
     
     // Dry Wet Slider for Band 1
     firstBandDryWet.setBounds(50, 475, 100, 100); // Combo Box 1 bounds: (150, 600, 100, 40)
-    firstBandDryWet.setRange(0.f, 100.f);
+    firstBandDryWet.setRange(0.f, 100.f, 0.1f);
     firstBandDryWet.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     firstBandDryWet.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
+    firstBandDryWet.setTextValueSuffix(" %");
     addAndMakeVisible(firstBandDryWet);
     firstBandDryWet.addListener(this);
     
     // Dry Wet Slider for Band 2
     secondBandDryWet.setBounds(350, 475, 100, 100); // Combo box 2 bounds: 450, 600, 100, 40
-    secondBandDryWet.setRange(0.f, 100.f);
+    secondBandDryWet.setRange(0.f, 100.f, 0.1f);
     secondBandDryWet.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     secondBandDryWet.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
+    secondBandDryWet.setTextValueSuffix(" %");
     addAndMakeVisible(secondBandDryWet);
     secondBandDryWet.addListener(this);
     
     // Dry Wet Slider for Band 3
     thirdBandDryWet.setBounds(650, 475, 100, 100); // Combo Box 3 bounds 750, 600, 100, 40
-    thirdBandDryWet.setRange(0.f, 100.f);
+    thirdBandDryWet.setRange(0.f, 100.f, 0.1f);
     thirdBandDryWet.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     thirdBandDryWet.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
+    thirdBandDryWet.setTextValueSuffix(" %");
     addAndMakeVisible(thirdBandDryWet);
     thirdBandDryWet.addListener(this);
     
     // Distortion Parameter 1 for Band 1 // Need to set starting value for slider dist parameters at 0
     firstBandDistParameter1.setBounds(150, 475, 100, 100); // Need to update
-    firstBandDistParameter1.setRange(0.f, 100.f);
+    firstBandDistParameter1.setRange(0.f, 100.f, 0.1f);
     firstBandDistParameter1.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     firstBandDistParameter1.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     addAndMakeVisible(firstBandDistParameter1);
@@ -69,7 +76,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // Distortion Parameter 2 for Band 1 // Need to set starting value for slider dist parameters at 0
     firstBandDistParameter2.setBounds(250, 475, 100, 100); // Need to update
-    firstBandDistParameter2.setRange(0.f, 100.f);
+    firstBandDistParameter2.setRange(0.f, 100.f, 0.1f);
     firstBandDistParameter2.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     firstBandDistParameter2.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     addAndMakeVisible(firstBandDistParameter2);
@@ -77,7 +84,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // Distortion Parameter 1 for Band 2 // Need to set starting value for slider dist parameters at 0
     secondBandDistParameter1.setBounds(450, 475, 100, 100); // Need to update
-    secondBandDistParameter1.setRange(0.f, 100.f);
+    secondBandDistParameter1.setRange(0.f, 100.f, 0.1f);
     secondBandDistParameter1.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     secondBandDistParameter1.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     addAndMakeVisible(secondBandDistParameter1);
@@ -85,7 +92,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // Distortion Parameter 2 for Band 2 // Need to set starting value for slider dist parameters at 0
     secondBandDistParameter2.setBounds(550, 475, 100, 100); // Need to update
-    secondBandDistParameter2.setRange(0.f, 100.f);
+    secondBandDistParameter2.setRange(0.f, 100.f, 0.1f);
     secondBandDistParameter2.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     secondBandDistParameter2.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     addAndMakeVisible(secondBandDistParameter2);
@@ -93,7 +100,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // Distortion Parameter 1 for Band 3 // Need to set starting value for slider dist parameters at 0
     thirdBandDistParameter1.setBounds(750, 475, 100, 100); // Need to update
-    thirdBandDistParameter1.setRange(0.f, 100.f);
+    thirdBandDistParameter1.setRange(0.f, 100.f, 0.1f);
     thirdBandDistParameter1.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     thirdBandDistParameter1.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     addAndMakeVisible(thirdBandDistParameter1);
@@ -101,7 +108,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // Distortion Parameter 2 for Band 3 // Need to set starting value for slider dist parameters at 0
     thirdBandDistParameter2.setBounds(850, 475, 100, 100); // Need to update
-    thirdBandDistParameter2.setRange(0.f, 100.f);
+    thirdBandDistParameter2.setRange(0.f, 100.f, 0.1f);
     thirdBandDistParameter2.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     thirdBandDistParameter2.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     addAndMakeVisible(thirdBandDistParameter2);
@@ -109,16 +116,18 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // Input and Output gain sliders
     inGain.setBounds(0, 100, 100, 200); // Need to update
-    inGain.setRange(-12.f, 12.f);
+    inGain.setRange(-12.f, 12.f, 0.1f);
     inGain.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     inGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
+    inGain.setTextValueSuffix(" dB");
     addAndMakeVisible(inGain);
     inGain.addListener(this);
     
     outGain.setBounds(900, 100, 100, 200); // Need to update
-    outGain.setRange(-12.f, 12.f);
+    outGain.setRange(-12.f, 12.f, 0.1f);
     outGain.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     outGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
+    outGain.setTextValueSuffix(" dB");
     addAndMakeVisible(outGain);
     outGain.addListener(this);
 
@@ -226,13 +235,13 @@ void MultiBandDistortionAudioProcessorEditor::paint (juce::Graphics& g)
                 juce::Justification::centred, false);
     
     // Parameter titles below each parameter
-    g.drawText ("Frequency", 250, 325, 100, 40,
+//    g.drawText ("Frequency", 250, 325, 100, 40,
+//                juce::Justification::centred, false);
+//    g.drawText ("Frequency", 650, 325, 100, 40,
+//                juce::Justification::centred, false);
+    g.drawText ("Crossover 1", 250, 440, 100, 40,
                 juce::Justification::centred, false);
-    g.drawText ("Frequency", 650, 325, 100, 40,
-                juce::Justification::centred, false);
-    g.drawText ("Crossover 1", 250, 442, 100, 40,
-                juce::Justification::centred, false);
-    g.drawText ("Crossover 2", 650, 442, 100, 40,
+    g.drawText ("Crossover 2", 650, 440, 100, 40,
                 juce::Justification::centred, false);
     
     g.drawText ("Dry/Wet", 50, 567, 100, 40,

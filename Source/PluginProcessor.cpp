@@ -7,9 +7,11 @@
 */
 
 // Current goals for the project:
+// -Fix some DSP bugs
 // -Implement a solo button per band
-// -Implement a frequency spectrum graphic
+// -Potentiall Implement a frequency spectrum graphic
 // -Implement more distortion options
+//      - Revise some distortion algorthms to sound "nicer"
 // -Implement a "check" where the higher crossover point cannot be set below the lower crossover point
 
 #include "PluginProcessor.h"
