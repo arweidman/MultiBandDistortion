@@ -17,6 +17,7 @@
 class MultiBandDistortionAudioProcessorEditor  : public juce::AudioProcessorEditor,
                                                  public juce::ComboBox::Listener, // inherit the combo listener class
                                                  public juce::Slider::Listener // inherit the slider listener class
+                                                 //public juce::ToggleButton::Listener // inherit the button listener class
 {
 public:
     MultiBandDistortionAudioProcessorEditor (MultiBandDistortionAudioProcessor&);
@@ -51,6 +52,10 @@ private:
     juce::Slider secondBandDistParameter2;
     juce::Slider thirdBandDistParameter1;
     juce::Slider thirdBandDistParameter2;
+    
+    // Input and Output Gain Sliders to adjust level at the entry and exit point
+    juce::Slider inGain;
+    juce::Slider outGain;
 
     // Our parameter that sets the type of distortion we want to add to each respective frequency band
     juce::ComboBox firstBandSelectionType;
@@ -62,6 +67,10 @@ private:
     juce::ToggleButton firstBandSoloButton;
     juce::ToggleButton secondBandSoloButton;
     juce::ToggleButton thirdBandSoloButton;
+    
+    // Images
+    juce::Image cartoonCar;
+    
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MultiBandDistortionAudioProcessorEditor)
 };

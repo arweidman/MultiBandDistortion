@@ -70,6 +70,9 @@ public:
     float distParam1Band3 = 0.f;
     float distParam2Band3 = 0.f;
     
+    float inputGain = 1.f;
+    float outputGain = 1.f;
+    
     // This will take a band number (the low, mid, or high band) and apply a new effect selection to it
     void setDistType(int bandNum, int selection);
 
@@ -96,6 +99,7 @@ private:
     Biquad highBandHighPassDup;
     
     double Fs = 48000;
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MultiBandDistortionAudioProcessor)
 };

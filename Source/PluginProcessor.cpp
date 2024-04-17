@@ -230,6 +230,9 @@ void MultiBandDistortionAudioProcessor::processBlock (juce::AudioBuffer<float>& 
         
         for (int n = 0 ; n < N ; n++) {
               
+            // Input Gain
+            channelData[n] *= (std::pow(10.f, (inputGain / 20))); // convert from db over to linear (not smoothed)
+            
             // First Band Effects Processing
             float a = lowBandLowPass.processSample(channelData[n], channel); // Process the filter on the sample
             float band1Filter = lowBandLowPassDup.processSample(a, channel); // Process the filter on the sample
@@ -250,7 +253,11 @@ void MultiBandDistortionAudioProcessor::processBlock (juce::AudioBuffer<float>& 
 
             float band3Processed = effect[2]->processSample(band3Filter, channel);
             
+            // Combination of all filters
             channelData[n] = band1Processed + band2Processed + band3Processed;
+            
+            // Output Gain
+            channelData[n] *= std::pow(10.f, (outputGain / 20)); // convert from db over to linear (not smoothed)
             
             // My original idea was to make a copy of each buffer, apply processing to each individually then combine them back together. This ended up being quite a pain and I was unable to get it to work,
             

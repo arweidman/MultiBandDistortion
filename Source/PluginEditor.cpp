@@ -20,7 +20,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     // First freq crossover slider
     firstCrossover.setBounds(250, 350, 100, 100);
     firstCrossover.setRange(20, 20000.f); // the right parameter will be stopped at the left parameter of secondCrossover.setRange
-    firstCrossover.setSkewFactorFromMidPoint(1000.f);
+    firstCrossover.setSkewFactorFromMidPoint(650.f);
     firstCrossover.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     firstCrossover.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     addAndMakeVisible(firstCrossover);
@@ -29,7 +29,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     // Second freq crossover slider
     secondCrossover.setBounds(650, 350, 100, 100);
     secondCrossover.setRange(20, 20000.f); // the left parameter will be stopped at the right parameter of secondCrossover.setRange
-    secondCrossover.setSkewFactorFromMidPoint(1000.f); // set so the middle of the knob will be 1000Hz, left will be 20 - 1000, and right will be 1000-20000
+    secondCrossover.setSkewFactorFromMidPoint(3500.f); // set so the middle of the knob will be 1000Hz, left will be 20 - 1000, and right will be 1000-20000
     secondCrossover.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     secondCrossover.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     addAndMakeVisible(secondCrossover);
@@ -107,9 +107,30 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     addAndMakeVisible(thirdBandDistParameter2);
     thirdBandDistParameter2.addListener(this);
     
+    // Input and Output gain sliders
+    inGain.setBounds(0, 100, 100, 200); // Need to update
+    inGain.setRange(-12.f, 12.f);
+    inGain.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    inGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
+    addAndMakeVisible(inGain);
+    inGain.addListener(this);
+    
+    outGain.setBounds(900, 100, 100, 200); // Need to update
+    outGain.setRange(-12.f, 12.f);
+    outGain.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    outGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
+    addAndMakeVisible(outGain);
+    outGain.addListener(this);
+
+    // Look and Feel For Sliders
+    getLookAndFeel().setColour(juce::Slider::thumbColourId, juce::Colours::darkcyan);
+    getLookAndFeel().setColour(juce::Slider::rotarySliderOutlineColourId, juce::Colours::azure);
+    getLookAndFeel().setColour(juce::Slider::rotarySliderFillColourId, juce::Colours::darkseagreen);
+    getLookAndFeel().setColour(juce::Slider::textBoxTextColourId, juce::Colours::beige);
+    
     // Selection Combo Box for Band 1
     firstBandSelectionType.addListener(this);
-    firstBandSelectionType.setBounds(150, 600, 100, 40); // first band distortion selection combo box
+    firstBandSelectionType.setBounds(150, 600, 200, 40); // first band distortion selection combo box
     firstBandSelectionType.addItem("Empty", 1);
     firstBandSelectionType.addItem("Full Wave Rectification", 2);
     firstBandSelectionType.addItem("Half Wave Rectification", 3);
@@ -121,7 +142,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // Selection Combo Box for Band 2
     secondBandSelectionType.addListener(this);
-    secondBandSelectionType.setBounds(450, 600, 100, 40);
+    secondBandSelectionType.setBounds(450, 600, 200, 40);
     secondBandSelectionType.addItem("Empty", 1);
     secondBandSelectionType.addItem("Full Wave Rectification", 2);
     secondBandSelectionType.addItem("Half Wave Rectification", 3);
@@ -133,7 +154,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // Selection Combo Box for Band 3
     thirdBandSelectionType.addListener(this);
-    thirdBandSelectionType.setBounds(750, 600, 100, 40); // Third band distortion selection combo box
+    thirdBandSelectionType.setBounds(750, 600, 200, 40); // Third band distortion selection combo box
     thirdBandSelectionType.addItem("Empty", 1);
     thirdBandSelectionType.addItem("Full Wave Rectification", 2);
     thirdBandSelectionType.addItem("Half Wave Rectification", 3);
@@ -142,6 +163,11 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     thirdBandSelectionType.addItem("Soft Clip (Arc Tangent)", 6);
     thirdBandSelectionType.addItem("Soft Clip (Cubic)", 7);
     addAndMakeVisible(thirdBandSelectionType);
+    
+    // Look and Feel For Combo Boxes
+    getLookAndFeel().setColour(juce::ComboBox::backgroundColourId, juce::Colours::darkcyan);
+    getLookAndFeel().setColour(juce::ComboBox::textColourId, juce::Colours::beige);
+    getLookAndFeel().setColour(juce::ComboBox::focusedOutlineColourId, juce::Colours::darkcyan);
     
     // Bypass Button
     bypassButton.setBounds(10, 10, 100, 20);
@@ -170,8 +196,6 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     thirdBandSoloButton.setToggleState(false, juce::dontSendNotification);
     addAndMakeVisible(thirdBandSoloButton);
 //    bypassButton.addListener(this);
-    
-    
 
 }
 
@@ -183,19 +207,22 @@ MultiBandDistortionAudioProcessorEditor::~MultiBandDistortionAudioProcessorEdito
 void MultiBandDistortionAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-    //g.fillAll (juce::Colours::beige); // this is how I will change the background color of my plugin
+    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+    g.fillAll (juce::Colours::cadetblue); // this is how I will change the background color of my plugin
 
     g.setColour (juce::Colours::beige);
     g.setFont (15.0f);
-    //g.drawFittedText ("MultiBand Distortion", getLocalBounds(), juce::Justification::centred, 1);
+    
+    // Adding Image
+    cartoonCar = juce::ImageCache::getFromMemory(BinaryData::Hot_Rod_PNG_png, BinaryData::Hot_Rod_PNG_pngSize);
+    g.drawImageAt(cartoonCar, 365, 100);
     
     // "Band select" titles below combo box
-    g.drawText ("Band 1 Select", 150, 635, 100, 40,
+    g.drawText ("Band 1 Select", 200, 635, 100, 40,
                 juce::Justification::centred, false);
-    g.drawText ("Band 2 Select", 450, 635, 100, 40,
+    g.drawText ("Band 2 Select", 500, 635, 100, 40,
                 juce::Justification::centred, false);
-    g.drawText ("Band 3 Select", 750, 635, 100, 40,
+    g.drawText ("Band 3 Select", 800, 635, 100, 40,
                 juce::Justification::centred, false);
     
     // Parameter titles below each parameter
@@ -228,7 +255,20 @@ void MultiBandDistortionAudioProcessorEditor::paint (juce::Graphics& g)
                 juce::Justification::centred, false);
     g.drawText ("Dist Param 2", 850, 567, 100, 40,
                 juce::Justification::centred, false);
+    
+    g.drawText ("Input Gain", 0, 295, 100, 40,
+                juce::Justification::centred, false);
+    g.drawText ("Output Gain", 900, 295, 100, 40,
+                juce::Justification::centred, false);
+    
+    // Plug-in Title
+    g.drawText ("Chop Shop", 435, 100, 100, 40,
+                juce::Justification::centred, true);
+    g.drawText ("A Hot Rod Multiband Distortion Tool", 350, 325, 300, 40,
+                juce::Justification::centred, true);
+    
 }
+
 
 void MultiBandDistortionAudioProcessorEditor::resized()
 {
@@ -239,7 +279,7 @@ void MultiBandDistortionAudioProcessorEditor::resized()
 // This is the part where our front end will interface with our backend!
 void MultiBandDistortionAudioProcessorEditor::sliderValueChanged(juce::Slider * slider) {
     if (slider == &firstCrossover) { // If the first crossover slider has been adjusted...
-        audioProcessor.filterFrequencyCrossover1 = firstCrossover.getValue(); // update/change the value of the variable we want associated with it...
+        audioProcessor.filterFrequencyCrossover1 = firstCrossover.getValue(); // update the value of the variable we want associated with it...
     }
     if (slider == &secondCrossover) {
         audioProcessor.filterFrequencyCrossover2 = secondCrossover.getValue();
@@ -271,8 +311,12 @@ void MultiBandDistortionAudioProcessorEditor::sliderValueChanged(juce::Slider * 
     if (slider == &thirdBandDistParameter2) {
         audioProcessor.distParam2Band3 = thirdBandDistParameter2.getValue();
     }
-    
-    // need for other knobs too 
+    if (slider == &inGain) {
+        audioProcessor.inputGain = inGain.getValue();
+    }
+    if (slider == &outGain) {
+        audioProcessor.outputGain = outGain.getValue();
+    }
 }
 
 void MultiBandDistortionAudioProcessorEditor::comboBoxChanged(juce::ComboBox * comboBox) {
@@ -281,6 +325,7 @@ void MultiBandDistortionAudioProcessorEditor::comboBoxChanged(juce::ComboBox * c
         
         // Based on the selection, certain paramters will become available for use, or unavaiable for use, I could probably make this into a function
         // The bool statements are set to false if the selected type does not utilize a parameter control
+        
         if (firstBandSelectionType.getSelectedId() == 1) { // Empty
             firstBandDryWet.setEnabled(false);
             firstBandDistParameter1.setEnabled(false);

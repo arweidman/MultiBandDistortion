@@ -4,6 +4,9 @@
               useAppConfig="0" addUsingNamespaceToJuceHeader="0" displaySplashScreen="1"
               jucerFormatVersion="1" pluginFormats="buildAU,buildStandalone,buildVST3">
   <MAINGROUP id="hNNBi1" name="MultiBandDistortion">
+    <GROUP id="{E7A5CCBB-0EE8-C514-44D6-D8E2D1D3C592}" name="Assets">
+      <FILE id="U0rs7H" name="Hot_Rod_PNG.png" compile="0" resource="1" file="Assets/Hot_Rod_PNG.png"/>
+    </GROUP>
     <GROUP id="{6F99A396-DE28-C0E2-3128-3F429D232ACC}" name="Source">
       <GROUP id="{8D5EECDD-DC45-E2A0-C56D-598E8264F4D7}" name="DSP">
         <GROUP id="{F175D2D4-E8E9-80AC-05F2-CEC90E9EC0BF}" name="Distortion">
