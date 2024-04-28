@@ -22,6 +22,10 @@ class MultiBandDistortionAudioProcessorEditor  : public juce::AudioProcessorEdit
 public:
     MultiBandDistortionAudioProcessorEditor (MultiBandDistortionAudioProcessor&);
     ~MultiBandDistortionAudioProcessorEditor() override;
+    
+    using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+//    using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
+//    using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
 
     //==============================================================================
     void paint (juce::Graphics&) override;
@@ -62,15 +66,19 @@ private:
     juce::ComboBox secondBandSelectionType;
     juce::ComboBox thirdBandSelectionType;
     
-    // Standard bypass button
-    juce::ToggleButton bypassButton;
-    juce::ToggleButton firstBandSoloButton;
-    juce::ToggleButton secondBandSoloButton;
-    juce::ToggleButton thirdBandSoloButton;
+    // Standard bypass/solo buttons
+//    juce::ToggleButton bypassButton;
+//    juce::ToggleButton firstBandSoloButton;
+//    juce::ToggleButton secondBandSoloButton;
+//    juce::ToggleButton thirdBandSoloButton;
     
     // Images
     juce::Image cartoonCar;
     
-
+    // Attachments
+    std::vector<std::unique_ptr<SliderAttachment>> sliderAttachments;
+//    std::vector<std::unique_ptr<ButtonAttachment>> buttonAttachments;
+//    std::vector<std::unique_ptr<ComboBoxAttachment>> comboBoxAttachments;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MultiBandDistortionAudioProcessorEditor)
 };

@@ -33,8 +33,9 @@ MultiBandDistortionAudioProcessor::MultiBandDistortionAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), 
 #endif
+apvts(*this,nullptr,"Params",createParams())
 {
 }
 
@@ -43,6 +44,49 @@ MultiBandDistortionAudioProcessor::~MultiBandDistortionAudioProcessor()
     for(int i = 0 ; i < NUM_DISTORTION ; i++) { // This deletes the effects when our plugin closes - "Release Memory"
         delete effect[i];
     }
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout MultiBandDistortionAudioProcessor::createParams(){
+    
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params; // This vector holds all of our parameters
+    
+    // ParameterID: tag for DAW
+    // String for user/automation lane
+    // Min value
+    // Max value
+    // Starting value
+    
+    // Input and output gain states
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{InGain,ParameterVersionHint},"Input Gain",-12.f, 12.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{OutGain,ParameterVersionHint},"Output Gain",-12.f, 12.f, 0.f));
+    
+    // Filter freq crossover states
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Crossover1,ParameterVersionHint},"Filter Frequency Crossover 1",0.f, 20000.f, 650.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Crossover2,ParameterVersionHint},"Filter Frequency Crossover 2",0.f, 20000.f, 3500.f));
+    
+    // Wet band states
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Wet1,ParameterVersionHint},"Wet, Band 1",-48.f, 6.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Wet2,ParameterVersionHint},"Wet, Band 2",-48.f, 6.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Wet3,ParameterVersionHint},"Wet, Band 3",-48.f, 6.f, 0.f));
+    
+    // Distortion parameter states
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Param1B1,ParameterVersionHint},"Distortion Parameter 1, Band 1",-0.f, 100.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Param2B1,ParameterVersionHint},"Distortion Parameter 2, Band 1",-0.f, 100.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Param1B2,ParameterVersionHint},"Distortion Parameter 1, Band 2",-0.f, 100.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Param2B2,ParameterVersionHint},"Distortion Parameter 2, Band 2",-0.f, 100.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Param1B3,ParameterVersionHint},"Distortion Parameter 1, Band 3",-0.f, 100.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Param2B3,ParameterVersionHint},"Distortion Parameter 2, Band 3",-0.f, 100.f, 0.f));
+ 
+    // Need one for combobox
+    
+    
+    // Solo button states
+//    params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{Bypass,ParameterVersionHint},"Bypass",true));
+//    params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{SoloBand1,ParameterVersionHint},"Solo, Band 1",true));
+//    params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{SoloBand2,ParameterVersionHint},"Solo, Band 2",true));
+//    params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{SoloBand3,ParameterVersionHint},"Solo, Band 3",true));
+    
+    return {params.begin(),params.end()};
 }
 
 //==============================================================================
@@ -242,7 +286,7 @@ void MultiBandDistortionAudioProcessor::processBlock (juce::AudioBuffer<float>& 
             float band1Processed = effect[0]->processSample(band1Filter, channel); // Processes the filtered sample with the effect parameters
             
             // Second Band Effects Processing
-            float b = midBandHighPass.processSample(buffer.getWritePointer(channel)[n], channel);
+            float b = midBandHighPass.processSample(channelData[n], channel);
             float c = midBandHighPassDup.processSample(b, channel); // Process the filter on the sample
             float d = midBandLowPass.processSample(c, channel); // Process the filter on the sample
             float band2Filter = midBandLowPassDup.processSample(d, channel); // Process the filter on the sample
@@ -250,7 +294,7 @@ void MultiBandDistortionAudioProcessor::processBlock (juce::AudioBuffer<float>& 
             float band2Processed = effect[1]->processSample(band2Filter, channel);
             
             // Third Band Effects Processing
-            float e = highBandHighPass.processSample(buffer.getWritePointer(channel)[n], channel);
+            float e = highBandHighPass.processSample(channelData[n], channel);
             float band3Filter = highBandHighPassDup.processSample(e, channel);
 
             float band3Processed = effect[2]->processSample(band3Filter, channel);

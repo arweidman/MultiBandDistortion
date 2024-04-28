@@ -178,34 +178,59 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     getLookAndFeel().setColour(juce::ComboBox::textColourId, juce::Colours::beige);
     getLookAndFeel().setColour(juce::ComboBox::focusedOutlineColourId, juce::Colours::darkcyan);
     
-    // Bypass Button
-    bypassButton.setBounds(10, 10, 100, 20);
-    bypassButton.setButtonText("Bypass");
-    bypassButton.setToggleState(false, juce::dontSendNotification);
-    addAndMakeVisible(bypassButton);
-//    bypassButton.addListener(this);
-    
-    // First Band Solo Button
-    firstBandSoloButton.setBounds(70, 610, 100, 20);
-    firstBandSoloButton.setButtonText("Solo");
-    firstBandSoloButton.setToggleState(false, juce::dontSendNotification);
-    addAndMakeVisible(firstBandSoloButton);
-//    bypassButton.addListener(this);
-    
-    // Second Band Solo Button
-    secondBandSoloButton.setBounds(370, 610, 100, 20);
-    secondBandSoloButton.setButtonText("Solo");
-    secondBandSoloButton.setToggleState(false, juce::dontSendNotification);
-    addAndMakeVisible(secondBandSoloButton);
-//    bypassButton.addListener(this);
-    
-    // third Band Solo Button
-    thirdBandSoloButton.setBounds(670, 610, 100, 20);
-    thirdBandSoloButton.setButtonText("Solo");
-    thirdBandSoloButton.setToggleState(false, juce::dontSendNotification);
-    addAndMakeVisible(thirdBandSoloButton);
-//    bypassButton.addListener(this);
+//    // Bypass Button
+//    bypassButton.setBounds(10, 10, 100, 20);
+//    bypassButton.setButtonText("Bypass");
+//    bypassButton.setToggleState(false, juce::dontSendNotification);
+//    addAndMakeVisible(bypassButton);
+////    bypassButton.addListener(this);
+//    
+//    // First Band Solo Button
+//    firstBandSoloButton.setBounds(70, 610, 100, 20);
+//    firstBandSoloButton.setButtonText("Solo");
+//    firstBandSoloButton.setToggleState(false, juce::dontSendNotification);
+//    addAndMakeVisible(firstBandSoloButton);
+////    bypassButton.addListener(this);
+//    
+//    // Second Band Solo Button
+//    secondBandSoloButton.setBounds(370, 610, 100, 20);
+//    secondBandSoloButton.setButtonText("Solo");
+//    secondBandSoloButton.setToggleState(false, juce::dontSendNotification);
+//    addAndMakeVisible(secondBandSoloButton);
+////    bypassButton.addListener(this);
+//    
+//    // third Band Solo Button
+//    thirdBandSoloButton.setBounds(670, 610, 100, 20);
+//    thirdBandSoloButton.setButtonText("Solo");
+//    thirdBandSoloButton.setToggleState(false, juce::dontSendNotification);
+//    addAndMakeVisible(thirdBandSoloButton);
+////    bypassButton.addListener(this);
 
+    // Slider attachments
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Crossover1,firstCrossover));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Crossover2,secondCrossover));
+    
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Wet1,firstBandDryWet));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Wet2,secondBandDryWet));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Wet3,thirdBandDryWet));
+    
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Param1B1,firstBandDistParameter1));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Param2B1,firstBandDistParameter2));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Param1B2,secondBandDistParameter1));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Param2B2,secondBandDistParameter2));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Param1B3,thirdBandDistParameter1));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Param2B3,thirdBandDistParameter2));
+    
+    // Need attachments for combo box and 
+    
+    
+    // Bypass/solo buttons attachments
+//    buttonAttachments.emplace_back(new ButtonAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Bypass,bypassButton));
+//    buttonAttachments.emplace_back(new ButtonAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::SoloBand1,firstBandSoloButton));
+//    buttonAttachments.emplace_back(new ButtonAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::SoloBand2,secondBandSoloButton));
+//    buttonAttachments.emplace_back(new ButtonAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::SoloBand3,thirdBandSoloButton));
+    
+    
 }
 
 MultiBandDistortionAudioProcessorEditor::~MultiBandDistortionAudioProcessorEditor()
