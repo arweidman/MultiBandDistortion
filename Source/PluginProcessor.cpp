@@ -23,6 +23,18 @@
 #include "SoftClipArcTan.h"
 #include "SoftClipCubic.h"
 
+const juce::StringRef MultiBandDistortionAudioProcessor::InGain = "InGain";
+const juce::StringRef MultiBandDistortionAudioProcessor::OutGain = "OutGain";
+const juce::StringRef MultiBandDistortionAudioProcessor::Wet1 = "Wet1";
+const juce::StringRef MultiBandDistortionAudioProcessor::Wet2 = "Wet2";
+const juce::StringRef MultiBandDistortionAudioProcessor::Wet3 = "Wet3";
+const juce::StringRef MultiBandDistortionAudioProcessor::Param1B1 = "Param1B1";
+const juce::StringRef MultiBandDistortionAudioProcessor::Param2B1 = "Param2B1";
+const juce::StringRef MultiBandDistortionAudioProcessor::Param1B2 = "Param1B2";
+const juce::StringRef MultiBandDistortionAudioProcessor::Param2B2 = "Param2B2";
+const juce::StringRef MultiBandDistortionAudioProcessor::Param1B3 = "Param1B3";
+const juce::StringRef MultiBandDistortionAudioProcessor::Param2B3 = "Param2B3";
+
 //==============================================================================
 MultiBandDistortionAudioProcessor::MultiBandDistortionAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
