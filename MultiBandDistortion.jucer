@@ -40,6 +40,8 @@
       <FILE id="jvlUND" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="RTAlBo" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="wIyhx8" name="StandardIncludes.h" compile="0" resource="0"
+            file="Source/StandardIncludes.h"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>

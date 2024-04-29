@@ -56,29 +56,7 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     
     juce::AudioProcessorValueTreeState apvts; // Creating the instance of our value tree state class
-    
-    static const juce::StringRef Crossover1;
-    static const juce::StringRef Crossover2;
-    
-    static const juce::StringRef Wet1;
-    static const juce::StringRef Wet2;
-    static const juce::StringRef Wet3;
-    
-    static const juce::StringRef Param1B1;
-    static const juce::StringRef Param2B1;
-    static const juce::StringRef Param1B2;
-    static const juce::StringRef Param2B2;
-    static const juce::StringRef Param1B3;
-    static const juce::StringRef Param2B3;
-    
-    static const juce::StringRef InGain;
-    static const juce::StringRef OutGain;
-    
-//    static const juce::StringRef Bypass;
-//    static const juce::StringRef SoloBand1;
-//    static const juce::StringRef SoloBand2;
-//    static const juce::StringRef SoloBand3;
-    
+       
     // Variables below are communicating between the front end and backend, where the components on the front end update these varibles, which are then sent to the backend (DSP algorithms). They need to be public so we can access them outside of our class.
     float filterFrequencyCrossover1 = 650.f;
     float filterFrequencyCrossover2 = 4000.f;

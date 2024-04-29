@@ -8,6 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "StandardIncludes.h"
 
 //==============================================================================
 MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor (MultiBandDistortionAudioProcessor& p)
@@ -19,9 +20,9 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // First freq crossover slider
     firstCrossover.setBounds(250, 350, 100, 100);
-    firstCrossover.setRange(20, 20000.f, 1.f); // eventually, the right parameter will be stopped at the left parameter of secondCrossover.setRange
-    firstCrossover.setSkewFactorFromMidPoint(650.f);
-    firstCrossover.setValue(650.f);
+//    firstCrossover.setRange(20, 20000.f, 1.f);
+//    firstCrossover.setSkewFactorFromMidPoint(650.f);
+//    firstCrossover.setValue(650.f);
     firstCrossover.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     firstCrossover.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     firstCrossover.setTextValueSuffix(" Hz");
@@ -30,9 +31,9 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // Second freq crossover slider
     secondCrossover.setBounds(650, 350, 100, 100);
-    secondCrossover.setRange(20, 20000.f, 1.f); // the left parameter will be stopped at the right parameter of secondCrossover.setRange
-    secondCrossover.setSkewFactorFromMidPoint(3500.f); // set so the middle of the knob will be 1000Hz, left will be 20 - 1000, and right will be 1000-20000
-    secondCrossover.setValue(3500.f);
+//    secondCrossover.setRange(20, 20000.f, 1.f);
+//    secondCrossover.setSkewFactorFromMidPoint(3500.f); // set so the middle of the knob will be 1000Hz, left will be 20 - 1000, and right will be 1000-20000
+//    secondCrossover.setValue(3500.f);
     secondCrossover.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     secondCrossover.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     secondCrossover.setTextValueSuffix(" Hz");
@@ -41,7 +42,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // Dry Wet Slider for Band 1
     firstBandDryWet.setBounds(50, 475, 100, 100); // Combo Box 1 bounds: (150, 600, 100, 40)
-    firstBandDryWet.setRange(0.f, 100.f, 0.1f);
+//    firstBandDryWet.setRange(0.f, 100.f, 0.1f);
     firstBandDryWet.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     firstBandDryWet.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     firstBandDryWet.setTextValueSuffix(" %");
@@ -50,7 +51,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // Dry Wet Slider for Band 2
     secondBandDryWet.setBounds(350, 475, 100, 100); // Combo box 2 bounds: 450, 600, 100, 40
-    secondBandDryWet.setRange(0.f, 100.f, 0.1f);
+//    secondBandDryWet.setRange(0.f, 100.f, 0.1f);
     secondBandDryWet.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     secondBandDryWet.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     secondBandDryWet.setTextValueSuffix(" %");
@@ -59,7 +60,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // Dry Wet Slider for Band 3
     thirdBandDryWet.setBounds(650, 475, 100, 100); // Combo Box 3 bounds 750, 600, 100, 40
-    thirdBandDryWet.setRange(0.f, 100.f, 0.1f);
+//    thirdBandDryWet.setRange(0.f, 100.f, 0.1f);
     thirdBandDryWet.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     thirdBandDryWet.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     thirdBandDryWet.setTextValueSuffix(" %");
@@ -68,7 +69,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // Distortion Parameter 1 for Band 1 // Need to set starting value for slider dist parameters at 0
     firstBandDistParameter1.setBounds(150, 475, 100, 100); // Need to update
-    firstBandDistParameter1.setRange(0.f, 100.f, 0.1f);
+//    firstBandDistParameter1.setRange(0.f, 100.f, 0.1f);
     firstBandDistParameter1.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     firstBandDistParameter1.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     addAndMakeVisible(firstBandDistParameter1);
@@ -76,7 +77,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // Distortion Parameter 2 for Band 1 // Need to set starting value for slider dist parameters at 0
     firstBandDistParameter2.setBounds(250, 475, 100, 100); // Need to update
-    firstBandDistParameter2.setRange(0.f, 100.f, 0.1f);
+//    firstBandDistParameter2.setRange(0.f, 100.f, 0.1f);
     firstBandDistParameter2.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     firstBandDistParameter2.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     addAndMakeVisible(firstBandDistParameter2);
@@ -84,7 +85,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // Distortion Parameter 1 for Band 2 // Need to set starting value for slider dist parameters at 0
     secondBandDistParameter1.setBounds(450, 475, 100, 100); // Need to update
-    secondBandDistParameter1.setRange(0.f, 100.f, 0.1f);
+//    secondBandDistParameter1.setRange(0.f, 100.f, 0.1f);
     secondBandDistParameter1.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     secondBandDistParameter1.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     addAndMakeVisible(secondBandDistParameter1);
@@ -92,7 +93,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // Distortion Parameter 2 for Band 2 // Need to set starting value for slider dist parameters at 0
     secondBandDistParameter2.setBounds(550, 475, 100, 100); // Need to update
-    secondBandDistParameter2.setRange(0.f, 100.f, 0.1f);
+//    secondBandDistParameter2.setRange(0.f, 100.f, 0.1f);
     secondBandDistParameter2.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     secondBandDistParameter2.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     addAndMakeVisible(secondBandDistParameter2);
@@ -100,7 +101,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // Distortion Parameter 1 for Band 3 // Need to set starting value for slider dist parameters at 0
     thirdBandDistParameter1.setBounds(750, 475, 100, 100); // Need to update
-    thirdBandDistParameter1.setRange(0.f, 100.f, 0.1f);
+//    thirdBandDistParameter1.setRange(0.f, 100.f, 0.1f);
     thirdBandDistParameter1.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     thirdBandDistParameter1.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     addAndMakeVisible(thirdBandDistParameter1);
@@ -108,7 +109,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // Distortion Parameter 2 for Band 3 // Need to set starting value for slider dist parameters at 0
     thirdBandDistParameter2.setBounds(850, 475, 100, 100); // Need to update
-    thirdBandDistParameter2.setRange(0.f, 100.f, 0.1f);
+//    thirdBandDistParameter2.setRange(0.f, 100.f, 0.1f);
     thirdBandDistParameter2.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
     thirdBandDistParameter2.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     addAndMakeVisible(thirdBandDistParameter2);
@@ -116,7 +117,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     
     // Input and Output gain sliders
     inGain.setBounds(0, 100, 100, 200); // Need to update
-    inGain.setRange(-12.f, 12.f, 0.1f);
+//    inGain.setRange(-12.f, 12.f, 0.1f);
     inGain.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     inGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     inGain.setTextValueSuffix(" dB");
@@ -124,7 +125,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     inGain.addListener(this);
     
     outGain.setBounds(900, 100, 100, 200); // Need to update
-    outGain.setRange(-12.f, 12.f, 0.1f);
+//    outGain.setRange(-12.f, 12.f, 0.1f);
     outGain.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     outGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     outGain.setTextValueSuffix(" dB");
@@ -207,21 +208,24 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
 ////    bypassButton.addListener(this);
 
     // Slider attachments
-    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Crossover1,firstCrossover));
-    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Crossover2,secondCrossover));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,g_InGain,inGain));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,g_OutGain,outGain));
     
-    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Wet1,firstBandDryWet));
-    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Wet2,secondBandDryWet));
-    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Wet3,thirdBandDryWet));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,g_Crossover1,firstCrossover));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,g_Crossover2,secondCrossover));
     
-    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Param1B1,firstBandDistParameter1));
-    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Param2B1,firstBandDistParameter2));
-    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Param1B2,secondBandDistParameter1));
-    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Param2B2,secondBandDistParameter2));
-    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Param1B3,thirdBandDistParameter1));
-    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Param2B3,thirdBandDistParameter2));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,g_Wet1,firstBandDryWet));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,g_Wet2,secondBandDryWet));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,g_Wet3,thirdBandDryWet));
     
-    // Need attachments for combo box and 
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,g_Param1B1,firstBandDistParameter1));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,g_Param2B1,firstBandDistParameter2));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,g_Param1B2,secondBandDistParameter1));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,g_Param2B2,secondBandDistParameter2));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,g_Param1B3,thirdBandDistParameter1));
+    sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,g_Param2B3,thirdBandDistParameter2));
+    
+    // Need attachments for combo box
     
     
     // Bypass/solo buttons attachments

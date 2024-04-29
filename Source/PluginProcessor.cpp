@@ -22,18 +22,7 @@
 #include "InfClip.h"
 #include "SoftClipArcTan.h"
 #include "SoftClipCubic.h"
-
-const juce::StringRef MultiBandDistortionAudioProcessor::InGain = "InGain";
-const juce::StringRef MultiBandDistortionAudioProcessor::OutGain = "OutGain";
-const juce::StringRef MultiBandDistortionAudioProcessor::Wet1 = "Wet1";
-const juce::StringRef MultiBandDistortionAudioProcessor::Wet2 = "Wet2";
-const juce::StringRef MultiBandDistortionAudioProcessor::Wet3 = "Wet3";
-const juce::StringRef MultiBandDistortionAudioProcessor::Param1B1 = "Param1B1";
-const juce::StringRef MultiBandDistortionAudioProcessor::Param2B1 = "Param2B1";
-const juce::StringRef MultiBandDistortionAudioProcessor::Param1B2 = "Param1B2";
-const juce::StringRef MultiBandDistortionAudioProcessor::Param2B2 = "Param2B2";
-const juce::StringRef MultiBandDistortionAudioProcessor::Param1B3 = "Param1B3";
-const juce::StringRef MultiBandDistortionAudioProcessor::Param2B3 = "Param2B3";
+#include "StandardIncludes.h"
 
 //==============================================================================
 MultiBandDistortionAudioProcessor::MultiBandDistortionAudioProcessor()
@@ -69,25 +58,25 @@ juce::AudioProcessorValueTreeState::ParameterLayout MultiBandDistortionAudioProc
     // Starting value
     
     // Input and output gain states
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{InGain,ParameterVersionHint},"Input Gain",-12.f, 12.f, 0.f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{OutGain,ParameterVersionHint},"Output Gain",-12.f, 12.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_InGain,ParameterVersionHint},"Input Gain",-12.f, 12.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_OutGain,ParameterVersionHint},"Output Gain",-12.f, 12.f, 0.f));
     
     // Filter freq crossover states
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Crossover1,ParameterVersionHint},"Filter Frequency Crossover 1",0.f, 20000.f, 650.f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Crossover2,ParameterVersionHint},"Filter Frequency Crossover 2",0.f, 20000.f, 3500.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Crossover1,ParameterVersionHint},"Filter Frequency Crossover 1",0.f, 20000.f, 650.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Crossover2,ParameterVersionHint},"Filter Frequency Crossover 2",0.f, 20000.f, 3500.f));
     
     // Wet band states
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Wet1,ParameterVersionHint},"Wet, Band 1",-48.f, 6.f, 0.f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Wet2,ParameterVersionHint},"Wet, Band 2",-48.f, 6.f, 0.f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Wet3,ParameterVersionHint},"Wet, Band 3",-48.f, 6.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Wet1,ParameterVersionHint},"Wet, Band 1",0.f, 100.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Wet2,ParameterVersionHint},"Wet, Band 2",0.f, 100.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Wet3,ParameterVersionHint},"Wet, Band 3",0.f, 100.f, 0.f));
     
     // Distortion parameter states
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Param1B1,ParameterVersionHint},"Distortion Parameter 1, Band 1",-0.f, 100.f, 0.f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Param2B1,ParameterVersionHint},"Distortion Parameter 2, Band 1",-0.f, 100.f, 0.f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Param1B2,ParameterVersionHint},"Distortion Parameter 1, Band 2",-0.f, 100.f, 0.f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Param2B2,ParameterVersionHint},"Distortion Parameter 2, Band 2",-0.f, 100.f, 0.f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Param1B3,ParameterVersionHint},"Distortion Parameter 1, Band 3",-0.f, 100.f, 0.f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{Param2B3,ParameterVersionHint},"Distortion Parameter 2, Band 3",-0.f, 100.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Param1B1,ParameterVersionHint},"Distortion Parameter 1, Band 1",0.f, 100.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Param2B1,ParameterVersionHint},"Distortion Parameter 2, Band 1",0.f, 100.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Param1B2,ParameterVersionHint},"Distortion Parameter 1, Band 2",0.f, 100.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Param2B2,ParameterVersionHint},"Distortion Parameter 2, Band 2",0.f, 100.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Param1B3,ParameterVersionHint},"Distortion Parameter 1, Band 3",0.f, 100.f, 0.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Param2B3,ParameterVersionHint},"Distortion Parameter 2, Band 3",0.f, 100.f, 0.f));
  
     // Need one for combobox
     
