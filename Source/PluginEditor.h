@@ -17,15 +17,15 @@
 class MultiBandDistortionAudioProcessorEditor  : public juce::AudioProcessorEditor,
                                                  public juce::ComboBox::Listener, // inherit the combo listener class
                                                  public juce::Slider::Listener // inherit the slider listener class
-                                                 //public juce::ToggleButton::Listener // inherit the button listener class
+//                                                 public juce::ToggleButton::Listener // inherit the button listener class
 {
 public:
     MultiBandDistortionAudioProcessorEditor (MultiBandDistortionAudioProcessor&);
     ~MultiBandDistortionAudioProcessorEditor() override;
     
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
-//    using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
-//    using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
+    using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
+    using ComboBoxAttachment = juce::AudioProcessorValueTreeState::ComboBoxAttachment;
 
     //==============================================================================
     void paint (juce::Graphics&) override;
@@ -34,6 +34,7 @@ public:
     // THESE WILL GET CALLED FOR ALL SLIDERS/ComboBoxes! dont need a function for each individual instance
     void sliderValueChanged(juce::Slider * slider) override; // Function for when our slider value is changed
     void comboBoxChanged(juce::ComboBox * combBox) override; // Function for when our combo box is changed
+//    void buttonChanged(juce::ToggleButton * button) override; // Function for when our button changes state
 
 private:
     
@@ -67,18 +68,18 @@ private:
     juce::ComboBox thirdBandSelectionType;
     
     // Standard bypass/solo buttons
-//    juce::ToggleButton bypassButton;
-//    juce::ToggleButton firstBandSoloButton;
-//    juce::ToggleButton secondBandSoloButton;
-//    juce::ToggleButton thirdBandSoloButton;
+    juce::ToggleButton bypassButton;
+    juce::ToggleButton firstBandSoloButton;
+    juce::ToggleButton secondBandSoloButton;
+    juce::ToggleButton thirdBandSoloButton;
     
     // Images
     juce::Image cartoonCar;
     
     // Attachments
     std::vector<std::unique_ptr<SliderAttachment>> sliderAttachments;
-//    std::vector<std::unique_ptr<ButtonAttachment>> buttonAttachments;
-//    std::vector<std::unique_ptr<ComboBoxAttachment>> comboBoxAttachments;
+    std::vector<std::unique_ptr<ButtonAttachment>> buttonAttachments;
+    std::vector<std::unique_ptr<ComboBoxAttachment>> comboBoxAttachments;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MultiBandDistortionAudioProcessorEditor)
 };

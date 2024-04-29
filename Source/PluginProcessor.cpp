@@ -9,9 +9,10 @@
 // Current goals for the project:
 // -Fix some DSP bugs
 // -Implement a solo button per band
-// -Potentiall Implement a frequency spectrum graphic
+// -Potentially Implement a frequency spectrum graphic
 // -Implement more distortion options
 //      - Revise some distortion algorthms to sound "nicer"
+//      - Remove Infinite clipping
 // -Implement a "check" where the higher crossover point cannot be set below the lower crossover point
 
 #include "PluginProcessor.h"
@@ -62,8 +63,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout MultiBandDistortionAudioProc
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_OutGain,ParameterVersionHint},"Output Gain",-12.f, 12.f, 0.f));
     
     // Filter freq crossover states
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Crossover1,ParameterVersionHint},"Filter Frequency Crossover 1",0.f, 20000.f, 650.f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Crossover2,ParameterVersionHint},"Filter Frequency Crossover 2",0.f, 20000.f, 3500.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Crossover1,ParameterVersionHint},"Filter Frequency Crossover 1",0.f, 20000.f, 500.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Crossover2,ParameterVersionHint},"Filter Frequency Crossover 2",0.f, 20000.f, 4000.f));
     
     // Wet band states
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Wet1,ParameterVersionHint},"Wet, Band 1",0.f, 100.f, 0.f));
@@ -78,14 +79,16 @@ juce::AudioProcessorValueTreeState::ParameterLayout MultiBandDistortionAudioProc
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Param1B3,ParameterVersionHint},"Distortion Parameter 1, Band 3",0.f, 100.f, 0.f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Param2B3,ParameterVersionHint},"Distortion Parameter 2, Band 3",0.f, 100.f, 0.f));
  
-    // Need one for combobox
-    
+    // Combobox states
+//    params.push_back(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID{g_ComboBand1,ParameterVersionHint},"ComboBox, Band 1", juce::StringArray("Empty","Full Wave Rectification","Half Wave Rectification","Hard Clip","Infinite Clip","Soft Clip (Arc Tangent)","Soft Clip (Cubic)",0)));
+//    params.push_back(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID{g_ComboBand2,ParameterVersionHint},"ComboBox, Band 2", juce::StringArray("Empty","Full Wave Rectification","Half Wave Rectification","Hard Clip","Infinite Clip","Soft Clip (Arc Tangent)","Soft Clip (Cubic)",0)));
+//    params.push_back(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID{g_ComboBand3,ParameterVersionHint},"ComboBox, Band 3", juce::StringArray("Empty","Full Wave Rectification","Half Wave Rectification","Hard Clip","Infinite Clip","Soft Clip (Arc Tangent)","Soft Clip (Cubic)",0)));
     
     // Solo button states
-//    params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{Bypass,ParameterVersionHint},"Bypass",true));
-//    params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{SoloBand1,ParameterVersionHint},"Solo, Band 1",true));
-//    params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{SoloBand2,ParameterVersionHint},"Solo, Band 2",true));
-//    params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{SoloBand3,ParameterVersionHint},"Solo, Band 3",true));
+    params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{g_Bypass,ParameterVersionHint},"Bypass",false));
+    params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{g_SoloBand1,ParameterVersionHint},"Solo, Band 1",false));
+    params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{g_SoloBand2,ParameterVersionHint},"Solo, Band 2",false));
+    params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{g_SoloBand3,ParameterVersionHint},"Solo, Band 3",false));
     
     return {params.begin(),params.end()};
 }
@@ -326,15 +329,24 @@ juce::AudioProcessorEditor* MultiBandDistortionAudioProcessor::createEditor()
 //==============================================================================
 void MultiBandDistortionAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    
+    auto currentState = apvts.copyState(); // make a duplicate that wont be updated during our write to file
+    
+    std::unique_ptr<juce::XmlElement> xml (currentState.createXml());
+    
+    copyXmlToBinary(*xml, destData);
+    
 }
 
 void MultiBandDistortionAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+    
+    std::unique_ptr<juce::XmlElement> xml (getXmlFromBinary(data,sizeInBytes));
+    
+    juce::ValueTree newTree = juce::ValueTree::fromXml(*xml);
+    
+    apvts.replaceState(newTree);
+    
 }
 
 void MultiBandDistortionAudioProcessor::setDistType(int bandNum, int selection) {

@@ -226,14 +226,15 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,g_Param2B3,thirdBandDistParameter2));
     
     // Need attachments for combo box
-    
+    comboBoxAttachments.emplace_back(new ComboBoxAttachment(audioProcessor.apvts,g_ComboBand1,firstBandSelectionType));
+    comboBoxAttachments.emplace_back(new ComboBoxAttachment(audioProcessor.apvts,g_ComboBand2,secondBandSelectionType));
+    comboBoxAttachments.emplace_back(new ComboBoxAttachment(audioProcessor.apvts,g_ComboBand3,thirdBandSelectionType));
     
     // Bypass/solo buttons attachments
-//    buttonAttachments.emplace_back(new ButtonAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::Bypass,bypassButton));
-//    buttonAttachments.emplace_back(new ButtonAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::SoloBand1,firstBandSoloButton));
-//    buttonAttachments.emplace_back(new ButtonAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::SoloBand2,secondBandSoloButton));
-//    buttonAttachments.emplace_back(new ButtonAttachment(audioProcessor.apvts,MultiBandDistortionAudioProcessor::SoloBand3,thirdBandSoloButton));
-    
+    buttonAttachments.emplace_back(new ButtonAttachment(audioProcessor.apvts,g_Bypass,bypassButton));
+    buttonAttachments.emplace_back(new ButtonAttachment(audioProcessor.apvts,g_SoloBand1,firstBandSoloButton));
+    buttonAttachments.emplace_back(new ButtonAttachment(audioProcessor.apvts,g_SoloBand2,secondBandSoloButton));
+    buttonAttachments.emplace_back(new ButtonAttachment(audioProcessor.apvts,g_SoloBand3,thirdBandSoloButton));
     
 }
 
@@ -479,5 +480,9 @@ void MultiBandDistortionAudioProcessorEditor::comboBoxChanged(juce::ComboBox * c
             thirdBandDistParameter2.setEnabled(false);
         }
     }
-        
 }
+
+//void MultiBandDistortionAudioProcessorEditor::buttonChanged(juce::ToggleButton * button) {
+//    
+//}
+

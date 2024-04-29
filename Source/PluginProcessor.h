@@ -75,6 +75,11 @@ public:
     float inputGain = 1.f;
     float outputGain = 1.f;
     
+    bool bypass = false;
+    bool band1Solo = false;
+    bool band2Solo = false;
+    bool band3Solo = false;
+    
     // This will take a band number (the low, mid, or high band) and apply a new effect selection to it
     void setDistType(int bandNum, int selection);
 

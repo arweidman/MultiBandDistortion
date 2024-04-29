@@ -10,7 +10,9 @@
 
 #pragma once
 
-// A way Austin showed me how to do
+// A way Austin showed me how to organize these
+
+// Sliders
 static const juce::String g_InGain = "InGain";
 static const juce::String g_OutGain = "OutGain";
 
@@ -28,9 +30,13 @@ static const juce::String g_Param2B2 = "Param2B2";
 static const juce::String g_Param1B3 = "Param1B3";
 static const juce::String g_Param2B3 = "Param2B3";
 
-// Need for ComboBox
+// ComboBoxes
+static const juce::String g_ComboBand1 = "ComboBand1";
+static const juce::String g_ComboBand2 = "ComboBand2";
+static const juce::String g_ComboBand3 = "ComboBand3";
 
-
-// Need for Buttons
-
-
+// Buttons
+static const juce::String g_Bypass = "Bypass";
+static const juce::String g_SoloBand1 = "SoloBand1";
+static const juce::String g_SoloBand2 = "SoloBand2";
+static const juce::String g_SoloBand3 = "SoloBand3";
