@@ -79,10 +79,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout MultiBandDistortionAudioProc
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Param1B3,ParameterVersionHint},"Distortion Parameter 1, Band 3",0.f, 100.f, 0.f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{g_Param2B3,ParameterVersionHint},"Distortion Parameter 2, Band 3",0.f, 100.f, 0.f));
  
-    // Combobox states
-//    params.push_back(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID{g_ComboBand1,ParameterVersionHint},"ComboBox, Band 1", juce::StringArray("Empty","Full Wave Rectification","Half Wave Rectification","Hard Clip","Infinite Clip","Soft Clip (Arc Tangent)","Soft Clip (Cubic)",0)));
-//    params.push_back(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID{g_ComboBand2,ParameterVersionHint},"ComboBox, Band 2", juce::StringArray("Empty","Full Wave Rectification","Half Wave Rectification","Hard Clip","Infinite Clip","Soft Clip (Arc Tangent)","Soft Clip (Cubic)",0)));
-//    params.push_back(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID{g_ComboBand3,ParameterVersionHint},"ComboBox, Band 3", juce::StringArray("Empty","Full Wave Rectification","Half Wave Rectification","Hard Clip","Infinite Clip","Soft Clip (Arc Tangent)","Soft Clip (Cubic)",0)));
+//    // Combobox states
+    params.push_back(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID{g_ComboBand1,ParameterVersionHint},"ComboBox, Band 1", juce::StringArray{"Empty","Full Wave Rectification","Half Wave Rectification","Hard Clip","Infinite Clip","Soft Clip (Arc Tangent)","Soft Clip (Cubic)"},0));
+    params.push_back(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID{g_ComboBand2,ParameterVersionHint},"ComboBox, Band 2", juce::StringArray{"Empty","Full Wave Rectification","Half Wave Rectification","Hard Clip","Infinite Clip","Soft Clip (Arc Tangent)","Soft Clip (Cubic)"},0));
+    params.push_back(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID{g_ComboBand3,ParameterVersionHint},"ComboBox, Band 3", juce::StringArray{"Empty","Full Wave Rectification","Half Wave Rectification","Hard Clip","Infinite Clip","Soft Clip (Arc Tangent)","Soft Clip (Cubic)"},0));
     
     // Solo button states
     params.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{g_Bypass,ParameterVersionHint},"Bypass",false));
@@ -158,6 +158,7 @@ void MultiBandDistortionAudioProcessor::changeProgramName (int index, const juce
 //==============================================================================
 void MultiBandDistortionAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    alpha = std::exp(-std::log(9.f) / (sampleRate * respTime));
     for (int i = 0 ; i < NUM_DISTORTION ; i++) {
         effect[i] = new DistortionProcessor;
         effect[i]->prepare(sampleRate);
@@ -254,6 +255,14 @@ void MultiBandDistortionAudioProcessor::processBlock (juce::AudioBuffer<float>& 
     highBandHighPassDup.setFilterType(Biquad::FilterType::HPF);
     
     // Setting distortion effect values
+    // smoothing here?
+//    smoothedDistP1B1 = alpha * smoothedDistP1B1 + (1.f - alpha) * distParam1Band1;
+//    effect[0]->setDistParam1(smoothedDistP1B1); // Setting the distortion 1 parameter if applicable
+//    smoothedDistP2B1 = alpha * smoothedDistP2B1 + (1.f - alpha) * distParam1Band1;
+//    effect[0]->setDistParam2(smoothedDistP2B1); // Setting the distrotion 2 parameter if applicable
+//    smoothedWet1 = alpha * smoothedWet1 + (1.f - alpha) * WetBand1;
+//    effect[0]->setWet(smoothedWet1); // Setting the wet value
+    
     effect[0]->setDistParam1(distParam1Band1); // Setting the distortion 1 parameter if applicable
     effect[0]->setDistParam2(distParam2Band1); // Setting the distrotion 2 parameter if applicable
     effect[0]->setWet(WetBand1); // Setting the wet value
@@ -279,38 +288,46 @@ void MultiBandDistortionAudioProcessor::processBlock (juce::AudioBuffer<float>& 
         // MAIN PROCESSING DONE HERE
         
         for (int n = 0 ; n < N ; n++) {
-              
-            // Input Gain
-            channelData[n] *= (std::pow(10.f, (inputGain / 20))); // convert from db over to linear (not smoothed)
+//            if (bypass == true) {
+//                channelData[n] = 0;
+//            }
+//            else {
             
-            // First Band Effects Processing
-            float a = lowBandLowPass.processSample(channelData[n], channel); // Process the filter on the sample
-            float band1Filter = lowBandLowPassDup.processSample(a, channel); // Process the filter on the sample
+                // Input Gain
+                float linInputGain = (std::pow(10.f, (inputGain / 20)));
+                smoothedInputGain[channel] = alpha * smoothedInputGain[channel] + (1.f - alpha) * linInputGain;
+                channelData[n] *= smoothedInputGain[channel]; // (smoothing applied)
+                
+                // First Band Effects Processing
+                float a = lowBandLowPass.processSample(channelData[n], channel); // Process the filter on the sample
+                float band1Filter = lowBandLowPassDup.processSample(a, channel); // Process the filter on the sample
+                
+                float band1Processed = effect[0]->processSample(band1Filter, channel); // Processes the filtered sample with the effect parameters
+                
+                // Second Band Effects Processing
+                float b = midBandHighPass.processSample(channelData[n], channel);
+                float c = midBandHighPassDup.processSample(b, channel); // Process the filter on the sample
+                float d = midBandLowPass.processSample(c, channel); // Process the filter on the sample
+                float band2Filter = midBandLowPassDup.processSample(d, channel); // Process the filter on the sample
+                
+                float band2Processed = effect[1]->processSample(band2Filter, channel);
+                
+                // Third Band Effects Processing
+                float e = highBandHighPass.processSample(channelData[n], channel);
+                float band3Filter = highBandHighPassDup.processSample(e, channel);
+                
+                float band3Processed = effect[2]->processSample(band3Filter, channel);
+                
+                // Combination of all filters
+                channelData[n] = band1Processed + band2Processed + band3Processed;
+                
+                // Output Gain
+                
+                float linOutputGain = std::pow(10.f, (outputGain / 20));
+                smoothedOutputGain[channel] = alpha * smoothedOutputGain[channel] + (1.f - alpha) * linOutputGain;
+                channelData[n] *= smoothedOutputGain[channel]; // (smoothing applied)
             
-            float band1Processed = effect[0]->processSample(band1Filter, channel); // Processes the filtered sample with the effect parameters
-            
-            // Second Band Effects Processing
-            float b = midBandHighPass.processSample(channelData[n], channel);
-            float c = midBandHighPassDup.processSample(b, channel); // Process the filter on the sample
-            float d = midBandLowPass.processSample(c, channel); // Process the filter on the sample
-            float band2Filter = midBandLowPassDup.processSample(d, channel); // Process the filter on the sample
-            
-            float band2Processed = effect[1]->processSample(band2Filter, channel);
-            
-            // Third Band Effects Processing
-            float e = highBandHighPass.processSample(channelData[n], channel);
-            float band3Filter = highBandHighPassDup.processSample(e, channel);
-
-            float band3Processed = effect[2]->processSample(band3Filter, channel);
-            
-            // Combination of all filters
-            channelData[n] = band1Processed + band2Processed + band3Processed;
-            
-            // Output Gain
-            channelData[n] *= std::pow(10.f, (outputGain / 20)); // convert from db over to linear (not smoothed)
-            
-            // My original idea was to make a copy of each buffer, apply processing to each individually then combine them back together. This ended up being quite a pain and I was unable to get it to work,
-            
+//            }
         }
     }
 }

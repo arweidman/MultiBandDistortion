@@ -34,8 +34,8 @@ public:
     // THESE WILL GET CALLED FOR ALL SLIDERS/ComboBoxes! dont need a function for each individual instance
     void sliderValueChanged(juce::Slider * slider) override; // Function for when our slider value is changed
     void comboBoxChanged(juce::ComboBox * combBox) override; // Function for when our combo box is changed
-//    void buttonChanged(juce::ToggleButton * button) override; // Function for when our button changes state
-
+//    void buttonClicked(juce::ToggleButton * button) override; // Function for when our button changes state
+    
 private:
     
     // This reference is provided as a quick way for your editor to

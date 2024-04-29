@@ -62,23 +62,37 @@ public:
     float filterFrequencyCrossover2 = 4000.f;
     
     float WetBand1 = 1.f;
+    float smoothedWet1 = 0.f;
     float WetBand2 = 1.f;
+    float smoothedWet2 = 0.f;
     float WetBand3 = 1.f;
+    float smoothedWet3 = 0.f;
     
     float distParam1Band1 = 0.f;
+    float smoothedDistP1B1 = 0.f;
     float distParam2Band1 = 0.f;
+    float smoothedDistP2B1 = 0.f;
     float distParam1Band2 = 0.f;
+    float smoothedDistP1B2[2] = {0.f};
     float distParam2Band2 = 0.f;
+    float smoothedDistP2B2[2] = {0.f};
     float distParam1Band3 = 0.f;
+    float smoothedDistP1B3[2] = {0.f};
     float distParam2Band3 = 0.f;
+    float smoothedDistP2B3[2] = {0.f};
     
     float inputGain = 1.f;
+    float smoothedInputGain[2] = {0.f};
     float outputGain = 1.f;
+    float smoothedOutputGain[2] = {0.f};
     
     bool bypass = false;
     bool band1Solo = false;
     bool band2Solo = false;
     bool band3Solo = false;
+    
+    float alpha = 0.999f;
+    const float respTime = 0.1f; // smoothing response time in seconds
     
     // This will take a band number (the low, mid, or high band) and apply a new effect selection to it
     void setDistType(int bandNum, int selection);

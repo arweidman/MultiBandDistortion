@@ -184,6 +184,7 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
 //    bypassButton.setButtonText("Bypass");
 //    bypassButton.setToggleState(false, juce::dontSendNotification);
 //    addAndMakeVisible(bypassButton);
+//    };
 ////    bypassButton.addListener(this);
 //    
 //    // First Band Solo Button
@@ -483,6 +484,17 @@ void MultiBandDistortionAudioProcessorEditor::comboBoxChanged(juce::ComboBox * c
 }
 
 //void MultiBandDistortionAudioProcessorEditor::buttonChanged(juce::ToggleButton * button) {
-//    
+//    if (button == &bypassButton){
+//        audioProcessor.bypass = bypassButton.getToggleState();
+//    }
+//    if (button == &firstBandSoloButton) {
+//        audioProcessor.band1Solo = firstBandSoloButton.getToggleState();
+//    }
+//    if (button == &secondBandSoloButton) {
+//        audioProcessor.band2Solo = secondBandSoloButton.getToggleState();
+//    }
+//    if (button == &thirdBandSoloButton) {
+//        audioProcessor.band3Solo = thirdBandSoloButton.getToggleState();
+//    }
 //}
 
