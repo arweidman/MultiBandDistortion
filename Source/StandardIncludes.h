@@ -10,7 +10,7 @@
 
 #pragma once
 
-// A way Austin showed me how to organize these
+// A way Austin had told me about to organize these. Made it slightly easier and cleaner to work with
 
 // Sliders
 static const juce::String g_InGain = "InGain";

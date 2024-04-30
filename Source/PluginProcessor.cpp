@@ -159,6 +159,7 @@ void MultiBandDistortionAudioProcessor::changeProgramName (int index, const juce
 void MultiBandDistortionAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     alpha = std::exp(-std::log(9.f) / (sampleRate * respTime));
+    
     for (int i = 0 ; i < NUM_DISTORTION ; i++) {
         effect[i] = new DistortionProcessor;
         effect[i]->prepare(sampleRate);
@@ -255,7 +256,7 @@ void MultiBandDistortionAudioProcessor::processBlock (juce::AudioBuffer<float>& 
     highBandHighPassDup.setFilterType(Biquad::FilterType::HPF);
     
     // Setting distortion effect values
-    // smoothing here?
+    // smoothing here? Didn't think it was needed for these parameters
 //    smoothedDistP1B1 = alpha * smoothedDistP1B1 + (1.f - alpha) * distParam1Band1;
 //    effect[0]->setDistParam1(smoothedDistP1B1); // Setting the distortion 1 parameter if applicable
 //    smoothedDistP2B1 = alpha * smoothedDistP2B1 + (1.f - alpha) * distParam1Band1;
@@ -275,59 +276,74 @@ void MultiBandDistortionAudioProcessor::processBlock (juce::AudioBuffer<float>& 
     effect[2]->setDistParam2(distParam2Band3);
     effect[2]->setWet(WetBand3);
     
+    float band1Processed = 0;
+    float band2Processed = 0;
+    float band3Processed = 0;
     
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         auto* channelData = buffer.getWritePointer (channel);
         
-//        for (int i = 0 ; i < NUM_DISTORTION ; i++) {
-//            effect[i] = new DistortionProcessor;
-//            effect[i]->process(channelData, N, channel); // ChannelData is our pointer to the buffer
-//        }
-        
         // MAIN PROCESSING DONE HERE
         
         for (int n = 0 ; n < N ; n++) {
-//            if (bypass == true) {
-//                channelData[n] = 0;
-//            }
-//            else {
-            
+            // Total bypass check
+            if (bypass == true) {
+                // will do nothing to the data, "returns it" as it was.
+            }
+            else {
+                
                 // Input Gain
                 float linInputGain = (std::pow(10.f, (inputGain / 20)));
                 smoothedInputGain[channel] = alpha * smoothedInputGain[channel] + (1.f - alpha) * linInputGain;
                 channelData[n] *= smoothedInputGain[channel]; // (smoothing applied)
+            
+                // Solo band 1 check
+                if(band1Solo == true || (band1Solo == false && band2Solo == false && band3Solo == false)) {
+                    // First Band Effects Processing
+                    float a = lowBandLowPass.processSample(channelData[n], channel); // Process the filter on the sample
+                    float band1Filter = lowBandLowPassDup.processSample(a, channel); // Process the filter on the sample
+                    
+                    band1Processed = effect[0]->processSample(band1Filter, channel); // Processes the filtered sample with the effect parameters
+                }
+                else {
+                    band1Processed = 0; // sets our processed band data = 0 if another solo button is turned on
+                }
                 
-                // First Band Effects Processing
-                float a = lowBandLowPass.processSample(channelData[n], channel); // Process the filter on the sample
-                float band1Filter = lowBandLowPassDup.processSample(a, channel); // Process the filter on the sample
+                // Solo band 2 check
+                if(band2Solo == true || (band1Solo == false && band2Solo == false && band3Solo == false)) {
+                    // Second Band Effects Processing
+                    float b = midBandHighPass.processSample(channelData[n], channel);
+                    float c = midBandHighPassDup.processSample(b, channel); // Process the filter on the sample
+                    float d = midBandLowPass.processSample(c, channel); // Process the filter on the sample
+                    float band2Filter = midBandLowPassDup.processSample(d, channel); // Process the filter on the sample
+                    
+                    band2Processed = effect[1]->processSample(band2Filter, channel);
+                }
+                else {
+                    band2Processed = 0; // sets our processed band data = 0 if another solo button is turned on
+                }
                 
-                float band1Processed = effect[0]->processSample(band1Filter, channel); // Processes the filtered sample with the effect parameters
-                
-                // Second Band Effects Processing
-                float b = midBandHighPass.processSample(channelData[n], channel);
-                float c = midBandHighPassDup.processSample(b, channel); // Process the filter on the sample
-                float d = midBandLowPass.processSample(c, channel); // Process the filter on the sample
-                float band2Filter = midBandLowPassDup.processSample(d, channel); // Process the filter on the sample
-                
-                float band2Processed = effect[1]->processSample(band2Filter, channel);
-                
-                // Third Band Effects Processing
-                float e = highBandHighPass.processSample(channelData[n], channel);
-                float band3Filter = highBandHighPassDup.processSample(e, channel);
-                
-                float band3Processed = effect[2]->processSample(band3Filter, channel);
-                
+                // Solo band 3 check
+                if(band3Solo == true || (band1Solo == false && band2Solo == false && band3Solo == false)) {
+                    // Third Band Effects Processing
+                    float e = highBandHighPass.processSample(channelData[n], channel);
+                    float band3Filter = highBandHighPassDup.processSample(e, channel);
+                    
+                    band3Processed = effect[2]->processSample(band3Filter, channel);
+                }
+                else {
+                    band3Processed = 0; // sets our processed band data = 0 if another solo button is turned on
+                }
+            
                 // Combination of all filters
                 channelData[n] = band1Processed + band2Processed + band3Processed;
                 
                 // Output Gain
-                
                 float linOutputGain = std::pow(10.f, (outputGain / 20));
                 smoothedOutputGain[channel] = alpha * smoothedOutputGain[channel] + (1.f - alpha) * linOutputGain;
                 channelData[n] *= smoothedOutputGain[channel]; // (smoothing applied)
-            
-//            }
+            }
         }
     }
 }
@@ -347,7 +363,7 @@ juce::AudioProcessorEditor* MultiBandDistortionAudioProcessor::createEditor()
 void MultiBandDistortionAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     
-    auto currentState = apvts.copyState(); // make a duplicate that wont be updated during our write to file
+    auto currentState = apvts.copyState();
     
     std::unique_ptr<juce::XmlElement> xml (currentState.createXml());
     

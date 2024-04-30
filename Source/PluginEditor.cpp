@@ -179,34 +179,33 @@ MultiBandDistortionAudioProcessorEditor::MultiBandDistortionAudioProcessorEditor
     getLookAndFeel().setColour(juce::ComboBox::textColourId, juce::Colours::beige);
     getLookAndFeel().setColour(juce::ComboBox::focusedOutlineColourId, juce::Colours::darkcyan);
     
-//    // Bypass Button
-//    bypassButton.setBounds(10, 10, 100, 20);
-//    bypassButton.setButtonText("Bypass");
-//    bypassButton.setToggleState(false, juce::dontSendNotification);
-//    addAndMakeVisible(bypassButton);
-//    };
-////    bypassButton.addListener(this);
-//    
-//    // First Band Solo Button
-//    firstBandSoloButton.setBounds(70, 610, 100, 20);
-//    firstBandSoloButton.setButtonText("Solo");
-//    firstBandSoloButton.setToggleState(false, juce::dontSendNotification);
-//    addAndMakeVisible(firstBandSoloButton);
-////    bypassButton.addListener(this);
-//    
-//    // Second Band Solo Button
-//    secondBandSoloButton.setBounds(370, 610, 100, 20);
-//    secondBandSoloButton.setButtonText("Solo");
-//    secondBandSoloButton.setToggleState(false, juce::dontSendNotification);
-//    addAndMakeVisible(secondBandSoloButton);
-////    bypassButton.addListener(this);
-//    
-//    // third Band Solo Button
-//    thirdBandSoloButton.setBounds(670, 610, 100, 20);
-//    thirdBandSoloButton.setButtonText("Solo");
-//    thirdBandSoloButton.setToggleState(false, juce::dontSendNotification);
-//    addAndMakeVisible(thirdBandSoloButton);
-////    bypassButton.addListener(this);
+    // Bypass Button
+    bypassButton.setBounds(10, 10, 100, 20);
+    bypassButton.setButtonText("Bypass");
+    bypassButton.setToggleState(false, juce::dontSendNotification);
+    addAndMakeVisible(bypassButton);
+    bypassButton.addListener(this);
+    
+    // First Band Solo Button
+    firstBandSoloButton.setBounds(70, 610, 100, 20);
+    firstBandSoloButton.setButtonText("Solo");
+    firstBandSoloButton.setToggleState(false, juce::dontSendNotification);
+    addAndMakeVisible(firstBandSoloButton);
+    firstBandSoloButton.addListener(this);
+    
+    // Second Band Solo Button
+    secondBandSoloButton.setBounds(370, 610, 100, 20);
+    secondBandSoloButton.setButtonText("Solo");
+    secondBandSoloButton.setToggleState(false, juce::dontSendNotification);
+    addAndMakeVisible(secondBandSoloButton);
+    secondBandSoloButton.addListener(this);
+    
+    // third Band Solo Button
+    thirdBandSoloButton.setBounds(670, 610, 100, 20);
+    thirdBandSoloButton.setButtonText("Solo");
+    thirdBandSoloButton.setToggleState(false, juce::dontSendNotification);
+    addAndMakeVisible(thirdBandSoloButton);
+    thirdBandSoloButton.addListener(this);
 
     // Slider attachments
     sliderAttachments.emplace_back(new SliderAttachment(audioProcessor.apvts,g_InGain,inGain));
@@ -270,6 +269,7 @@ void MultiBandDistortionAudioProcessorEditor::paint (juce::Graphics& g)
 //                juce::Justification::centred, false);
 //    g.drawText ("Frequency", 650, 325, 100, 40,
 //                juce::Justification::centred, false);
+    
     g.drawText ("Crossover 1", 250, 440, 100, 40,
                 juce::Justification::centred, false);
     g.drawText ("Crossover 2", 650, 440, 100, 40,
@@ -483,18 +483,18 @@ void MultiBandDistortionAudioProcessorEditor::comboBoxChanged(juce::ComboBox * c
     }
 }
 
-//void MultiBandDistortionAudioProcessorEditor::buttonChanged(juce::ToggleButton * button) {
-//    if (button == &bypassButton){
-//        audioProcessor.bypass = bypassButton.getToggleState();
-//    }
-//    if (button == &firstBandSoloButton) {
-//        audioProcessor.band1Solo = firstBandSoloButton.getToggleState();
-//    }
-//    if (button == &secondBandSoloButton) {
-//        audioProcessor.band2Solo = secondBandSoloButton.getToggleState();
-//    }
-//    if (button == &thirdBandSoloButton) {
-//        audioProcessor.band3Solo = thirdBandSoloButton.getToggleState();
-//    }
-//}
+void MultiBandDistortionAudioProcessorEditor::buttonClicked(juce::Button *button) {
+    if (button == &bypassButton){
+        audioProcessor.bypass = bypassButton.getToggleState();
+    }
+    if (button == &firstBandSoloButton) {
+        audioProcessor.band1Solo = firstBandSoloButton.getToggleState();
+    }
+    if (button == &secondBandSoloButton) {
+        audioProcessor.band2Solo = secondBandSoloButton.getToggleState();
+    }
+    if (button == &thirdBandSoloButton) {
+        audioProcessor.band3Solo = thirdBandSoloButton.getToggleState();
+    }
+}
 

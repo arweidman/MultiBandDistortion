@@ -16,8 +16,8 @@
 */
 class MultiBandDistortionAudioProcessorEditor  : public juce::AudioProcessorEditor,
                                                  public juce::ComboBox::Listener, // inherit the combo listener class
-                                                 public juce::Slider::Listener // inherit the slider listener class
-//                                                 public juce::ToggleButton::Listener // inherit the button listener class
+                                                 public juce::Slider::Listener, // inherit the slider listener class
+                                                 public juce::Button::Listener // inherit the button listener class
 {
 public:
     MultiBandDistortionAudioProcessorEditor (MultiBandDistortionAudioProcessor&);
@@ -32,9 +32,9 @@ public:
     void resized() override;
     
     // THESE WILL GET CALLED FOR ALL SLIDERS/ComboBoxes! dont need a function for each individual instance
-    void sliderValueChanged(juce::Slider * slider) override; // Function for when our slider value is changed
-    void comboBoxChanged(juce::ComboBox * combBox) override; // Function for when our combo box is changed
-//    void buttonClicked(juce::ToggleButton * button) override; // Function for when our button changes state
+    void sliderValueChanged(juce::Slider *slider) override; // Function for when our slider value is changed
+    void comboBoxChanged(juce::ComboBox *combBox) override; // Function for when our combo box is changed
+    void buttonClicked(juce::Button *button) override; // Function for when our button changes state
     
 private:
     
